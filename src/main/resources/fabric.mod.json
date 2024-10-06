@@ -1,0 +1,49 @@
+{
+
+    "schemaVersion": 1,
+
+    "id": "pickaxetrims",
+    "version": "${version}",
+
+    "depends": {
+        "java": ">=21",
+        "minecraft": "*",
+        "fabricloader": ">=0.14.0",
+        "fabric": "*"
+    },
+
+    "name": "Pickaxe Trims",
+    "description": "Put special trims on your pickaxe to give it extra abilities!",
+
+    "license": "UNLICENSED",
+    "authors": [
+        {
+            "name": "luavixen",
+            "contact": {
+                "email": "lua@foxgirl.dev",
+                "website": "https://foxgirl.dev/"
+            }
+        },
+        {
+            "name": "Lupin",
+            "contact": {
+                "website": "https://www.youtube.com/@LupinYT"
+            }
+        }
+    ],
+
+    "entrypoints": {
+        "main": ["dev.foxgirl.pickaxetrims.PickaxeTrimsMod"]
+    },
+    "mixins": [
+        {
+            "config": "pickaxetrims.mixins-shared.json",
+            "environment": "*"
+        },
+        {
+            "config": "pickaxetrims.mixins-client.json",
+            "environment": "client"
+        }
+    ]
+
+}

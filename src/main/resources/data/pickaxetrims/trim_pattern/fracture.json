@@ -1,0 +1,7 @@
+{
+    "asset_id": "pickaxetrims:fracture",
+    "description": {
+        "translate": "trim_pattern.pickaxetrims.fracture"
+    },
+    "template_item": "pickaxetrims:fracture_armor_trim_smithing_template"
+}

@@ -1,0 +1,6 @@
+{
+    "parent": "minecraft:item/handheld",
+    "textures": {
+        "layer0": "pickaxetrims:item/diamond_pickaxe_trimmed_quartz"
+    }
+}

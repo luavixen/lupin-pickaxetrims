@@ -1,0 +1,6 @@
+{
+    "parent": "minecraft:item/handheld",
+    "textures": {
+        "layer0": "pickaxetrims:item/netherite_pickaxe_trimmed_crying_obsidian"
+    }
+}

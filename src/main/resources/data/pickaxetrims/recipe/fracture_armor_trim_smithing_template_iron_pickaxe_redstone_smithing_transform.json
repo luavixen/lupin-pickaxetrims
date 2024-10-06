@@ -1,0 +1,21 @@
+{
+    "type": "minecraft:smithing_transform",
+    "category": "equipment",
+    "template": {
+        "item": "pickaxetrims:fracture_armor_trim_smithing_template"
+    },
+    "base": {
+        "item": "minecraft:iron_pickaxe"
+    },
+    "addition": {
+        "item": "minecraft:redstone"
+    },
+    "result": {
+        "id": "minecraft:iron_pickaxe",
+        "components": {
+            "pickaxetrims:trim": {
+                "ingredient": "minecraft:redstone"
+            }
+        }
+    }
+}

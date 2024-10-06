@@ -1,0 +1,6 @@
+{
+    "parent": "minecraft:item/handheld",
+    "textures": {
+        "layer0": "pickaxetrims:item/iron_pickaxe_trimmed_lapis_lazuli"
+    }
+}

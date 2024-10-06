@@ -1,0 +1,14 @@
+{
+    "required": true,
+    "minVersion": "0.8",
+    "compatibilityLevel": "JAVA_21",
+    "package": "dev.foxgirl.pickaxetrims.client.mixin",
+    "injectors": {
+        "defaultRequire": 1
+    },
+    "client": [
+        "MixinItemRenderer",
+        "MixinItemStack",
+        "MixinModelLoader"
+    ]
+}
