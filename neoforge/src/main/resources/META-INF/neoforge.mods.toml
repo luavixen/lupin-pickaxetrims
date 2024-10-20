@@ -1,0 +1,42 @@
+modLoader = "javafml"
+loaderVersion = "[1,)"
+
+license = "UNLICENSED"
+
+[[mods]]
+modId = "pickaxetrims"
+version = "${version}"
+
+displayName = "Better Pickaxe Trims"
+
+authors = "lupiiin_, luavixen <lua@foxgirl.dev> (https://foxgirl.dev/)"
+description = "Put special trims on your pickaxe to give it extra abilities!"
+
+logoFile = "pickaxetrims-icon.png"
+
+[[mixins]]
+config = "pickaxetrims.mixins-shared.json"
+
+[[mixins]]
+config = "pickaxetrims.mixins-client.json"
+
+[[dependencies.pickaxetrims]]
+modId = "neoforge"
+type = "required"
+versionRange = "[21.0,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.pickaxetrims]]
+modId = "minecraft"
+type = "required"
+versionRange = "[${mcversion},)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.pickaxetrims]]
+modId = "architectury"
+type = "required"
+versionRange = "[13.0.2,)"
+ordering = "AFTER"
+side = "BOTH"

@@ -1,41 +1,80 @@
 plugins {
-    id 'fabric-loom' version '1.7.4'
+    id 'architectury-plugin' version '3.4.159'
+    id 'dev.architectury.loom' version '1.7.413' apply false
+    id 'com.gradleup.shadow' version '8.3.1' apply false
 }
-
-archivesBaseName = project.mod_name
 
 version = project.mod_version
 group = project.mod_group
 
-repositories {
-    maven {
-        name = 'Architectury Maven'
-        url = 'https://maven.architectury.dev/'
+architectury {
+    minecraft = project.minecraft_version
+}
+
+subprojects {
+    apply plugin: 'dev.architectury.loom'
+
+    dependencies {
+        minecraft "com.mojang:minecraft:${project.minecraft_version}"
+        mappings loom.layered {
+            it.mappings("net.fabricmc:yarn:${project.yarn_mappings}:v2")
+            it.mappings("dev.architectury:yarn-mappings-patch-neoforge:${project.yarn_mappings_patch_neoforge}")
+            // it.mappings("dev.architectury:yarn-mappings-patch-forge:${project.yarn_mappings_patch_forge}")
+        }
     }
-    mavenCentral()
+
+    jar {
+        manifest {
+            attributes([
+                'Specification-Title'     : rootProject.mod_name,
+                'Specification-Vendor'    : 'luavixen',
+                'Specification-Version'   : '1',
+                'Implementation-Title'    : 'Better Pickaxe Trims',
+                'Implementation-Version'  : rootProject.mod_version,
+                'Implementation-Vendor'   : 'luavixen',
+                'Implementation-Timestamp': new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+            ])
+        }
+    }
 }
 
-dependencies {
-    minecraft "com.mojang:minecraft:${project.minecraft_version}"
-    mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
-    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
-    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-    // modImplementation "dev.architectury:architectury:${project.architectury_api_version}"
-    modImplementation "dev.architectury:architectury-fabric:${project.architectury_api_version}"
-}
+allprojects {
+    apply plugin: 'java'
+    apply plugin: 'architectury-plugin'
 
-java {
-    sourceCompatibility = JavaVersion.VERSION_21
-    targetCompatibility = JavaVersion.VERSION_21
-}
+    base {
+        archivesName = "${rootProject.mod_name}-${project.name}-${rootProject.minecraft_version}"
+    }
 
-compileJava {
-    options.release = 21
-    options.encoding = 'UTF-8'
-}
+    version = rootProject.mod_version
+    group = rootProject.mod_group
 
-processResources {
-    filesMatching('fabric.mod.json') {
-        expand 'version': project.mod_version
+    repositories {
+        maven {
+            name = 'Architectury Maven'
+            url = 'https://maven.architectury.dev/'
+        }
+        maven {
+            name = 'NeoForged Maven'
+            url = 'https://maven.neoforged.net/releases/'
+        }
+        mavenCentral()
+    }
+
+    java {
+        withSourcesJar()
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
+    }
+
+    compileJava {
+        options.release = 21
+        options.encoding = 'UTF-8'
+    }
+
+    processResources {
+        filesMatching(['fabric.mod.json', 'META-INF/mods.toml', 'META-INF/*.mods.toml']) {
+            expand 'version': project.mod_version, 'mcversion': project.minecraft_version_min
+        }
     }
 }

@@ -20,3 +20,9 @@ pluginManagement {
         gradlePluginPortal()
     }
 }
+
+rootProject.name = 'pickaxetrims'
+
+include 'common'
+include 'fabric'
+include 'neoforge'

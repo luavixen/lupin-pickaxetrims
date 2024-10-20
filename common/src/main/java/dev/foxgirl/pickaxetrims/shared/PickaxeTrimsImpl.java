@@ -4,12 +4,14 @@ import dev.architectury.event.EventResult;
 import dev.architectury.event.events.common.BlockEvent;
 import dev.architectury.event.events.common.LootEvent;
 import dev.architectury.event.events.common.TickEvent;
+import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.utils.value.IntValue;
 import dev.foxgirl.pickaxetrims.shared.effect.CryingObsidianMultiBreakEffect;
 import dev.foxgirl.pickaxetrims.shared.effect.LapisGlowEffect;
 import dev.foxgirl.pickaxetrims.shared.effect.RedstoneVeinMineEffect;
 import net.minecraft.block.BlockState;
 import net.minecraft.component.ComponentType;
+import net.minecraft.item.Item;
 import net.minecraft.item.SmithingTemplateItem;
 import net.minecraft.loot.LootPool;
 import net.minecraft.loot.LootTable;
@@ -17,6 +19,7 @@ import net.minecraft.loot.entry.EmptyEntry;
 import net.minecraft.loot.entry.ItemEntry;
 import net.minecraft.loot.provider.number.ConstantLootNumberProvider;
 import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
@@ -37,6 +40,9 @@ public final class PickaxeTrimsImpl implements TickEvent.Server, BlockEvent.Brea
 
     public final @NotNull PickaxeTrimsConfig config;
 
+    private final @NotNull DeferredRegister<ComponentType<?>> registryComponentType;
+    private final @NotNull DeferredRegister<Item> registryItem;
+
     private final @NotNull Supplier<@NotNull ComponentType<PickaxeTrim>> trimComponentType;
     private final @NotNull Supplier<@NotNull SmithingTemplateItem> smithingTemplateItem;
 
@@ -47,12 +53,17 @@ public final class PickaxeTrimsImpl implements TickEvent.Server, BlockEvent.Brea
         return smithingTemplateItem.get();
     }
 
-    public PickaxeTrimsImpl(@NotNull PickaxeTrimsRegistryInterface registries) {
+    public PickaxeTrimsImpl() {
         INSTANCE = this;
 
         config = PickaxeTrimsConfig.loadConfig();
 
-        trimComponentType = registries.registerDataComponentType(
+        registryComponentType
+            = DeferredRegister.create("pickaxetrims", RegistryKeys.DATA_COMPONENT_TYPE);
+        registryItem
+            = DeferredRegister.create("pickaxetrims", RegistryKeys.ITEM);
+
+        trimComponentType = registryComponentType.register(
             Identifier.of("pickaxetrims", "trim"),
             () -> ComponentType
                 .<PickaxeTrim>builder()
@@ -61,7 +72,7 @@ public final class PickaxeTrimsImpl implements TickEvent.Server, BlockEvent.Brea
                 .cache()
                 .build()
         );
-        smithingTemplateItem = registries.registerItem(
+        smithingTemplateItem = registryItem.register(
             Identifier.of("pickaxetrims", "fracture_armor_trim_smithing_template"),
             () -> SmithingTemplateItem.of(Identifier.of("pickaxetrims", "fracture"))
         );
@@ -72,6 +83,9 @@ public final class PickaxeTrimsImpl implements TickEvent.Server, BlockEvent.Brea
     private LapisGlowEffect lapisEffect;
 
     public void initialize() {
+        registryComponentType.register();
+        registryItem.register();
+
         LootEvent.MODIFY_LOOT_TABLE.register(this);
         TickEvent.SERVER_POST.register(this);
         BlockEvent.BREAK.register(this);

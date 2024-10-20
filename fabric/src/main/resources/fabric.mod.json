@@ -9,7 +9,8 @@
         "java": ">=21",
         "minecraft": "*",
         "fabricloader": ">=0.14.0",
-        "fabric": "*"
+        "fabric": "*",
+        "architectury": ">=13.0.2"
     },
 
     "name": "Better Pickaxe Trims",
