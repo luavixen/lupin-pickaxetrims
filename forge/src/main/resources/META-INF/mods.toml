@@ -21,22 +21,22 @@ config = "pickaxetrims.mixins-shared.json"
 config = "pickaxetrims.mixins-client.json"
 
 [[dependencies.pickaxetrims]]
-modId = "neoforge"
-type = "required"
-versionRange = "[21.0,)"
+modId = "forge"
+mandatory = true
+versionRange = "[47,)"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.pickaxetrims]]
 modId = "minecraft"
-type = "required"
+mandatory = true
 versionRange = "[${mcversion},)"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.pickaxetrims]]
 modId = "architectury"
-type = "required"
-versionRange = "[13.0.2,)"
+mandatory = true
+versionRange = "[9.2.0,)"
 ordering = "AFTER"
 side = "BOTH"
