@@ -30,6 +30,8 @@ public class PickaxeTrimsMod {
     private void onBuildCreativeModeTabContents(BuildCreativeModeTabContentsEvent event) {
         if (event.getTabKey() == ItemGroups.INGREDIENTS) {
             event.add(impl.getSmithingTemplateItem());
+        } else if (event.getTabKey() == impl.getItemGroupKey()) {
+            impl.forEachStackForItemGroup(event::add);
         }
     }
 

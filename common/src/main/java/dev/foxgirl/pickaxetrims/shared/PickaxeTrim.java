@@ -1,5 +1,6 @@
 package dev.foxgirl.pickaxetrims.shared;
 
+import com.google.common.collect.ImmutableList;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -14,6 +15,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import java.util.function.Consumer;
 
 public record PickaxeTrim(@NotNull TrimType type) {
 
@@ -41,7 +44,8 @@ public record PickaxeTrim(@NotNull TrimType type) {
         GOLD,
         IRON;
 
-        public static final int COUNT = values().length;
+        public static final @NotNull List<PickaxeType> VALUES = ImmutableList.copyOf(values());
+        public static final int COUNT = VALUES.size();
 
         private static @Nullable PickaxeType from(@NotNull Item item) {
             if (item == Items.NETHERITE_PICKAXE) return NETHERITE;
@@ -49,6 +53,15 @@ public record PickaxeTrim(@NotNull TrimType type) {
             if (item == Items.GOLDEN_PICKAXE) return GOLD;
             if (item == Items.IRON_PICKAXE) return IRON;
             return null;
+        }
+
+        public @NotNull Item getItem() {
+            return switch (this) {
+                case NETHERITE -> Items.NETHERITE_PICKAXE;
+                case DIAMOND -> Items.DIAMOND_PICKAXE;
+                case GOLD -> Items.GOLDEN_PICKAXE;
+                case IRON -> Items.IRON_PICKAXE;
+            };
         }
 
         @Override
@@ -65,34 +78,45 @@ public record PickaxeTrim(@NotNull TrimType type) {
     public enum TrimType {
         CRYING_OBSIDIAN {
             public @NotNull String toString() { return "crying_obsidian"; }
+            public @NotNull Item getItem() { return Items.CRYING_OBSIDIAN; }
             public @NotNull Formatting getColor() { return Formatting.DARK_PURPLE; }
         },
         LAPIS_LAZULI {
             public @NotNull String toString() { return "lapis_lazuli"; }
+            public @NotNull Item getItem() { return Items.LAPIS_LAZULI; }
             public @NotNull Formatting getColor() { return Formatting.BLUE; }
         },
         EMERALD {
             public @NotNull String toString() { return "emerald"; }
+            public @NotNull Item getItem() { return Items.EMERALD; }
             public @NotNull Formatting getColor() { return Formatting.GREEN; }
         },
         QUARTZ {
             public @NotNull String toString() { return "quartz"; }
+            public @NotNull Item getItem() { return Items.QUARTZ; }
             public @NotNull Formatting getColor() { return Formatting.WHITE; }
         },
         REDSTONE {
             public @NotNull String toString() { return "redstone"; }
+            public @NotNull Item getItem() { return Items.REDSTONE; }
             public @NotNull Formatting getColor() { return Formatting.RED; }
         },
         COPPER {
             public @NotNull String toString() { return "copper"; }
+            public @NotNull Item getItem() { return Items.COPPER_INGOT; }
             public @NotNull Formatting getColor() { return Formatting.GOLD; }
         };
 
-        public static final int COUNT = values().length;
+        public static final @NotNull List<TrimType> VALUES = ImmutableList.copyOf(values());
+        public static final int COUNT = VALUES.size();
 
-        public static final @NotNull Map<String, TrimType> BY_NAME = Util.make(new HashMap<>(), (map) -> {
-            for (var type : values()) map.put(type.toString(), type);
+        private static final @NotNull Map<String, TrimType> BY_NAME = Util.make(new HashMap<>(), (map) -> {
+            for (var type : VALUES) map.put(type.toString(), type);
         });
+
+        public static @Nullable TrimType parse(@Nullable String name) {
+            return BY_NAME.get(name);
+        }
 
         public static @Nullable TrimType from(@NotNull Item item) {
             if (item == Items.CRYING_OBSIDIAN) return CRYING_OBSIDIAN;
@@ -104,7 +128,8 @@ public record PickaxeTrim(@NotNull TrimType type) {
             return null;
         }
 
-        protected abstract @NotNull Formatting getColor();
+        public abstract @NotNull Item getItem();
+        public abstract @NotNull Formatting getColor();
 
         public @NotNull Text getMaterialText() {
             return Text.translatable("pickaxetrims.material." + this).formatted(getColor());
@@ -126,11 +151,12 @@ public record PickaxeTrim(@NotNull TrimType type) {
         return null;
     }
 
-    public static void set(@NotNull ItemStack stack, @NotNull PickaxeTrim trim) {
-        set(stack, trim.trimType());
+    public static @NotNull ItemStack set(@NotNull ItemStack stack, @NotNull PickaxeTrim trim) {
+        return set(stack, trim.trimType());
     }
-    public static void set(@NotNull ItemStack stack, @NotNull TrimType trimType) {
+    public static @NotNull ItemStack set(@NotNull ItemStack stack, @NotNull TrimType trimType) {
         stack.getOrCreateNbt().putString(NBT_KEY, trimType.toString());
+        return stack;
     }
 
     public static @Nullable PickaxeType getPickaxeType(@Nullable ItemStack stack) {
