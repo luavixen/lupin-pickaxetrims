@@ -6,7 +6,6 @@ import dev.architectury.event.events.common.LootEvent;
 import dev.architectury.event.events.common.TickEvent;
 import dev.architectury.registry.CreativeTabRegistry;
 import dev.architectury.registry.registries.DeferredRegister;
-import dev.architectury.registry.registries.DeferredSupplier;
 import dev.architectury.registry.registries.RegistrySupplier;
 import dev.architectury.utils.value.IntValue;
 import dev.foxgirl.pickaxetrims.shared.effect.CryingObsidianMultiBreakEffect;
@@ -20,10 +19,8 @@ import net.minecraft.loot.LootTable;
 import net.minecraft.loot.entry.EmptyEntry;
 import net.minecraft.loot.entry.ItemEntry;
 import net.minecraft.loot.provider.number.ConstantLootNumberProvider;
-import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
@@ -33,9 +30,7 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Optional;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 public final class PickaxeTrimsImpl implements TickEvent.Server, BlockEvent.Break, LootEvent.ModifyLootTable {
 
