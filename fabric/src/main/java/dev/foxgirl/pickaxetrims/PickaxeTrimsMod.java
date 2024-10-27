@@ -17,6 +17,9 @@ public class PickaxeTrimsMod implements ModInitializer {
         ItemGroupEvents.modifyEntriesEvent(ItemGroups.INGREDIENTS).register(content -> {
             content.addAfter(Items.BOLT_ARMOR_TRIM_SMITHING_TEMPLATE, impl.getSmithingTemplateItem());
         });
+        ItemGroupEvents.modifyEntriesEvent(impl.getItemGroupKey()).register(content -> {
+            impl.forEachStackForItemGroup(content::add);
+        });
     }
 
 }

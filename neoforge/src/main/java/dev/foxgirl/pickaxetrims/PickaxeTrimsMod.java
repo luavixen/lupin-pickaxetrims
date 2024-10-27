@@ -32,6 +32,8 @@ public class PickaxeTrimsMod {
                 new ItemStack(impl.getSmithingTemplateItem()),
                 ItemGroup.StackVisibility.PARENT_AND_SEARCH_TABS
             );
+        } else if (event.getTabKey() == impl.getItemGroupKey()) {
+            impl.forEachStackForItemGroup(event::add);
         }
     }
 

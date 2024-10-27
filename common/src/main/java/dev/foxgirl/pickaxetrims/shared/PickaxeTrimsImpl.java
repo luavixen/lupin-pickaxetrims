@@ -4,30 +4,37 @@ import dev.architectury.event.EventResult;
 import dev.architectury.event.events.common.BlockEvent;
 import dev.architectury.event.events.common.LootEvent;
 import dev.architectury.event.events.common.TickEvent;
+import dev.architectury.registry.CreativeTabRegistry;
 import dev.architectury.registry.registries.DeferredRegister;
+import dev.architectury.registry.registries.DeferredSupplier;
+import dev.architectury.registry.registries.RegistrySupplier;
 import dev.architectury.utils.value.IntValue;
 import dev.foxgirl.pickaxetrims.shared.effect.CryingObsidianMultiBreakEffect;
 import dev.foxgirl.pickaxetrims.shared.effect.LapisGlowEffect;
 import dev.foxgirl.pickaxetrims.shared.effect.RedstoneVeinMineEffect;
 import net.minecraft.block.BlockState;
 import net.minecraft.component.ComponentType;
-import net.minecraft.item.Item;
-import net.minecraft.item.SmithingTemplateItem;
+import net.minecraft.item.*;
 import net.minecraft.loot.LootPool;
 import net.minecraft.loot.LootTable;
 import net.minecraft.loot.entry.EmptyEntry;
 import net.minecraft.loot.entry.ItemEntry;
 import net.minecraft.loot.provider.number.ConstantLootNumberProvider;
+import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public final class PickaxeTrimsImpl implements TickEvent.Server, BlockEvent.Break, LootEvent.ModifyLootTable {
@@ -42,15 +49,24 @@ public final class PickaxeTrimsImpl implements TickEvent.Server, BlockEvent.Brea
 
     private final @NotNull DeferredRegister<ComponentType<?>> registryComponentType;
     private final @NotNull DeferredRegister<Item> registryItem;
+    private final @NotNull DeferredRegister<ItemGroup> registryItemGroup;
 
-    private final @NotNull Supplier<@NotNull ComponentType<PickaxeTrim>> trimComponentType;
-    private final @NotNull Supplier<@NotNull SmithingTemplateItem> smithingTemplateItem;
+    private final @NotNull RegistrySupplier<@NotNull ComponentType<PickaxeTrim>> trimComponentType;
+    private final @NotNull RegistrySupplier<@NotNull SmithingTemplateItem> smithingTemplateItem;
+    private final @NotNull RegistrySupplier<@NotNull ItemGroup> itemGroup;
 
     public @NotNull ComponentType<PickaxeTrim> getTrimComponentType() {
         return trimComponentType.get();
     }
     public @NotNull SmithingTemplateItem getSmithingTemplateItem() {
         return smithingTemplateItem.get();
+    }
+    public @NotNull ItemGroup getItemGroup() {
+        return itemGroup.get();
+    }
+
+    public @NotNull RegistryKey<ItemGroup> getItemGroupKey() {
+        return RegistryKey.of(itemGroup.getRegistryKey(), itemGroup.getId());
     }
 
     public PickaxeTrimsImpl() {
@@ -62,6 +78,8 @@ public final class PickaxeTrimsImpl implements TickEvent.Server, BlockEvent.Brea
             = DeferredRegister.create("pickaxetrims", RegistryKeys.DATA_COMPONENT_TYPE);
         registryItem
             = DeferredRegister.create("pickaxetrims", RegistryKeys.ITEM);
+        registryItemGroup
+            = DeferredRegister.create("pickaxetrims", RegistryKeys.ITEM_GROUP);
 
         trimComponentType = registryComponentType.register(
             Identifier.of("pickaxetrims", "trim"),
@@ -76,6 +94,13 @@ public final class PickaxeTrimsImpl implements TickEvent.Server, BlockEvent.Brea
             Identifier.of("pickaxetrims", "fracture_armor_trim_smithing_template"),
             () -> SmithingTemplateItem.of(Identifier.of("pickaxetrims", "fracture"))
         );
+        itemGroup = registryItemGroup.register(
+            Identifier.of("pickaxetrims", "pickaxe_trims_tab"),
+            () -> CreativeTabRegistry.create(
+                Text.translatable("itemGroup.pickaxetrims"),
+                () -> PickaxeTrim.set(new ItemStack(Items.NETHERITE_PICKAXE), PickaxeTrim.TrimType.EMERALD)
+            )
+        );
     }
 
     private CryingObsidianMultiBreakEffect cryingObsidianEffect;
@@ -85,6 +110,7 @@ public final class PickaxeTrimsImpl implements TickEvent.Server, BlockEvent.Brea
     public void initialize() {
         registryComponentType.register();
         registryItem.register();
+        registryItemGroup.register();
 
         LootEvent.MODIFY_LOOT_TABLE.register(this);
         TickEvent.SERVER_POST.register(this);
@@ -93,6 +119,15 @@ public final class PickaxeTrimsImpl implements TickEvent.Server, BlockEvent.Brea
         cryingObsidianEffect = new CryingObsidianMultiBreakEffect();
         redstoneEffect = new RedstoneVeinMineEffect();
         lapisEffect = new LapisGlowEffect();
+    }
+
+    public void forEachStackForItemGroup(@NotNull Consumer<@NotNull ItemStack> consumer) {
+        for (var pickaxeType : PickaxeTrim.PickaxeType.VALUES) {
+            for (var trimType : PickaxeTrim.TrimType.VALUES) {
+                consumer.accept(PickaxeTrim.set(new ItemStack(pickaxeType.getItem()), trimType));
+            }
+        }
+        consumer.accept(new ItemStack(getSmithingTemplateItem()));
     }
 
     private boolean shouldModifyLootTable(RegistryKey<LootTable> key) {
