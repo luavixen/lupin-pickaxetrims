@@ -8,14 +8,9 @@
         "item": "minecraft:diamond_pickaxe"
     },
     "addition": {
-        "item": "minecraft:quartz"
+        "item": "minecraft:emerald"
     },
     "result": {
-        "id": "minecraft:diamond_pickaxe",
-        "components": {
-            "pickaxetrims:trim": {
-                "ingredient": "minecraft:quartz"
-            }
-        }
+        "item": "minecraft:diamond_pickaxe"
     }
 }

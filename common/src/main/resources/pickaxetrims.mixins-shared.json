@@ -9,6 +9,7 @@
     "mixins": [
         "copper_durability_effect.MixinItemStack",
         "emerald_bonus_drops_effect.MixinApplyBonusLootFunction",
-        "quartz_bonus_experience_effect.MixinEnchantmentHelper"
+        "quartz_bonus_experience_effect.MixinBlock",
+        "MixinSmithingTransformRecipe"
     ]
 }

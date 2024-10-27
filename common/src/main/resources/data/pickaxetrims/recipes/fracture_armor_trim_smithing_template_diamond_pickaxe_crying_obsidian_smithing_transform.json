@@ -8,14 +8,9 @@
         "item": "minecraft:diamond_pickaxe"
     },
     "addition": {
-        "item": "minecraft:redstone"
+        "item": "minecraft:crying_obsidian"
     },
     "result": {
-        "id": "minecraft:diamond_pickaxe",
-        "components": {
-            "pickaxetrims:trim": {
-                "ingredient": "minecraft:redstone"
-            }
-        }
+        "item": "minecraft:diamond_pickaxe"
     }
 }

@@ -27,7 +27,7 @@ public abstract class MixinApplyBonusLootFunction {
     @Inject(
         method = "process(Lnet/minecraft/item/ItemStack;Lnet/minecraft/loot/context/LootContext;)Lnet/minecraft/item/ItemStack;",
         at = @At(
-            target = "Lnet/minecraft/enchantment/EnchantmentHelper;getLevel(Lnet/minecraft/registry/entry/RegistryEntry;Lnet/minecraft/item/ItemStack;)I",
+            target = "Lnet/minecraft/enchantment/EnchantmentHelper;getLevel(Lnet/minecraft/enchantment/Enchantment;Lnet/minecraft/item/ItemStack;)I",
             value = "INVOKE", ordinal = 0, shift = At.Shift.BEFORE
         )
     )

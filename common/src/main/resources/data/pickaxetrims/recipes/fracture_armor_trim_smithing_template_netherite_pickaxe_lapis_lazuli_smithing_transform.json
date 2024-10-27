@@ -11,11 +11,6 @@
         "item": "minecraft:lapis_lazuli"
     },
     "result": {
-        "id": "minecraft:netherite_pickaxe",
-        "components": {
-            "pickaxetrims:trim": {
-                "ingredient": "minecraft:lapis_lazuli"
-            }
-        }
+        "item": "minecraft:netherite_pickaxe"
     }
 }

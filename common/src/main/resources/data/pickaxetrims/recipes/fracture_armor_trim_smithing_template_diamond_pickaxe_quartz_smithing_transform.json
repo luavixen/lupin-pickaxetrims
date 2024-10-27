@@ -5,17 +5,12 @@
         "item": "pickaxetrims:fracture_armor_trim_smithing_template"
     },
     "base": {
-        "item": "minecraft:iron_pickaxe"
+        "item": "minecraft:diamond_pickaxe"
     },
     "addition": {
         "item": "minecraft:quartz"
     },
     "result": {
-        "id": "minecraft:iron_pickaxe",
-        "components": {
-            "pickaxetrims:trim": {
-                "ingredient": "minecraft:quartz"
-            }
-        }
+        "item": "minecraft:diamond_pickaxe"
     }
 }

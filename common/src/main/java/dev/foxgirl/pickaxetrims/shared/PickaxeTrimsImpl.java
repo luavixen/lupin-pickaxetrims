@@ -10,15 +10,13 @@ import dev.foxgirl.pickaxetrims.shared.effect.CryingObsidianMultiBreakEffect;
 import dev.foxgirl.pickaxetrims.shared.effect.LapisGlowEffect;
 import dev.foxgirl.pickaxetrims.shared.effect.RedstoneVeinMineEffect;
 import net.minecraft.block.BlockState;
-import net.minecraft.component.ComponentType;
 import net.minecraft.item.Item;
 import net.minecraft.item.SmithingTemplateItem;
+import net.minecraft.loot.LootManager;
 import net.minecraft.loot.LootPool;
-import net.minecraft.loot.LootTable;
 import net.minecraft.loot.entry.EmptyEntry;
 import net.minecraft.loot.entry.ItemEntry;
 import net.minecraft.loot.provider.number.ConstantLootNumberProvider;
-import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -40,15 +38,9 @@ public final class PickaxeTrimsImpl implements TickEvent.Server, BlockEvent.Brea
 
     public final @NotNull PickaxeTrimsConfig config;
 
-    private final @NotNull DeferredRegister<ComponentType<?>> registryComponentType;
     private final @NotNull DeferredRegister<Item> registryItem;
-
-    private final @NotNull Supplier<@NotNull ComponentType<PickaxeTrim>> trimComponentType;
     private final @NotNull Supplier<@NotNull SmithingTemplateItem> smithingTemplateItem;
 
-    public @NotNull ComponentType<PickaxeTrim> getTrimComponentType() {
-        return trimComponentType.get();
-    }
     public @NotNull SmithingTemplateItem getSmithingTemplateItem() {
         return smithingTemplateItem.get();
     }
@@ -58,20 +50,7 @@ public final class PickaxeTrimsImpl implements TickEvent.Server, BlockEvent.Brea
 
         config = PickaxeTrimsConfig.loadConfig();
 
-        registryComponentType
-            = DeferredRegister.create("pickaxetrims", RegistryKeys.DATA_COMPONENT_TYPE);
-        registryItem
-            = DeferredRegister.create("pickaxetrims", RegistryKeys.ITEM);
-
-        trimComponentType = registryComponentType.register(
-            Identifier.of("pickaxetrims", "trim"),
-            () -> ComponentType
-                .<PickaxeTrim>builder()
-                .codec(PickaxeTrim.CODEC)
-                .packetCodec(PickaxeTrim.PACKET_CODEC)
-                .cache()
-                .build()
-        );
+        registryItem = DeferredRegister.create("pickaxetrims", RegistryKeys.ITEM);
         smithingTemplateItem = registryItem.register(
             Identifier.of("pickaxetrims", "fracture_armor_trim_smithing_template"),
             () -> SmithingTemplateItem.of(Identifier.of("pickaxetrims", "fracture"))
@@ -83,7 +62,6 @@ public final class PickaxeTrimsImpl implements TickEvent.Server, BlockEvent.Brea
     private LapisGlowEffect lapisEffect;
 
     public void initialize() {
-        registryComponentType.register();
         registryItem.register();
 
         LootEvent.MODIFY_LOOT_TABLE.register(this);
@@ -95,16 +73,16 @@ public final class PickaxeTrimsImpl implements TickEvent.Server, BlockEvent.Brea
         lapisEffect = new LapisGlowEffect();
     }
 
-    private boolean shouldModifyLootTable(RegistryKey<LootTable> key) {
-        return config.smithingTemplateLootTables.contains(key.getValue().toString());
+    private boolean shouldModifyLootTable(Identifier id) {
+        return config.smithingTemplateLootTables.contains(id.toString());
     }
     private int getLootTableEmptyEntryWeight() {
         return Math.max(0, 1 - (int) (1.0F / config.smithingTemplateLootProbability));
     }
 
     @Override
-    public void modifyLootTable(RegistryKey<LootTable> key, LootEvent.LootTableModificationContext context, boolean builtin) {
-        if (shouldModifyLootTable(key)) {
+    public void modifyLootTable(@Nullable LootManager lootDataManager, Identifier id, LootEvent.LootTableModificationContext context, boolean builtin) {
+        if (shouldModifyLootTable(id)) {
             context.addPool(
                 LootPool.builder()
                     .rolls(ConstantLootNumberProvider.create(1.0F))

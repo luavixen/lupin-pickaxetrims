@@ -22,7 +22,7 @@ public final class PickaxeTrimModels {
         for (var pickaxeType : PickaxeTrim.PickaxeType.values()) {
             for (var trimType : PickaxeTrim.TrimType.values()) {
                 var baseID = Identifier.of("pickaxetrims", pickaxeType + "_trimmed_" + trimType);
-                var modelInventoryID = ModelIdentifier.ofInventoryVariant(baseID);
+                var modelInventoryID = new ModelIdentifier(baseID, "inventory");
                 MODEL_IDS[calculateIndex(pickaxeType, trimType)] = modelInventoryID;
             }
         }

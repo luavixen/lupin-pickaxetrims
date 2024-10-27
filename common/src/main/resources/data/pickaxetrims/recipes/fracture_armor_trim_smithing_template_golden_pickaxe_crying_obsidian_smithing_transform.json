@@ -8,14 +8,9 @@
         "item": "minecraft:golden_pickaxe"
     },
     "addition": {
-        "item": "minecraft:copper_ingot"
+        "item": "minecraft:crying_obsidian"
     },
     "result": {
-        "id": "minecraft:golden_pickaxe",
-        "components": {
-            "pickaxetrims:trim": {
-                "ingredient": "minecraft:copper_ingot"
-            }
-        }
+        "item": "minecraft:golden_pickaxe"
     }
 }

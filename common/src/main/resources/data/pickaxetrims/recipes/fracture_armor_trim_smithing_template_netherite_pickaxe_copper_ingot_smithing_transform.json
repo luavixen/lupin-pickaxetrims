@@ -5,17 +5,12 @@
         "item": "pickaxetrims:fracture_armor_trim_smithing_template"
     },
     "base": {
-        "item": "minecraft:diamond_pickaxe"
+        "item": "minecraft:netherite_pickaxe"
     },
     "addition": {
         "item": "minecraft:copper_ingot"
     },
     "result": {
-        "id": "minecraft:diamond_pickaxe",
-        "components": {
-            "pickaxetrims:trim": {
-                "ingredient": "minecraft:copper_ingot"
-            }
-        }
+        "item": "minecraft:netherite_pickaxe"
     }
 }

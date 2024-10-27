@@ -8,14 +8,9 @@
         "item": "minecraft:iron_pickaxe"
     },
     "addition": {
-        "item": "minecraft:redstone"
+        "item": "minecraft:lapis_lazuli"
     },
     "result": {
-        "id": "minecraft:iron_pickaxe",
-        "components": {
-            "pickaxetrims:trim": {
-                "ingredient": "minecraft:redstone"
-            }
-        }
+        "item": "minecraft:iron_pickaxe"
     }
 }

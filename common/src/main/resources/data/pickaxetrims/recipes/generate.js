@@ -16,10 +16,7 @@ function createPickaxeTrimRecipe(pickaxe, trim) {
             item: trim.id
         },
         result: {
-            id: pickaxe.id,
-            components: {
-                'pickaxetrims:trim': { ingredient: trim.id }
-            }
+            item: pickaxe.id
         }
     };
     return recipe;

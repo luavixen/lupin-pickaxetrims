@@ -11,11 +11,6 @@
         "item": "minecraft:quartz"
     },
     "result": {
-        "id": "minecraft:golden_pickaxe",
-        "components": {
-            "pickaxetrims:trim": {
-                "ingredient": "minecraft:quartz"
-            }
-        }
+        "item": "minecraft:golden_pickaxe"
     }
 }

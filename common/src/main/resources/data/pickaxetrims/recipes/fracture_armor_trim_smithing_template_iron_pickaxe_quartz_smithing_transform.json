@@ -8,14 +8,9 @@
         "item": "minecraft:iron_pickaxe"
     },
     "addition": {
-        "item": "minecraft:crying_obsidian"
+        "item": "minecraft:quartz"
     },
     "result": {
-        "id": "minecraft:iron_pickaxe",
-        "components": {
-            "pickaxetrims:trim": {
-                "ingredient": "minecraft:crying_obsidian"
-            }
-        }
+        "item": "minecraft:iron_pickaxe"
     }
 }

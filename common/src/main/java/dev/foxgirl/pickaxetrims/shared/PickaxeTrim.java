@@ -1,18 +1,8 @@
 package dev.foxgirl.pickaxetrims.shared;
 
-import com.mojang.serialization.Codec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.item.tooltip.TooltipAppender;
-import net.minecraft.item.tooltip.TooltipType;
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.codec.PacketCodecs;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.registry.entry.RegistryFixedCodec;
 import net.minecraft.screen.ScreenTexts;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
@@ -21,24 +11,29 @@ import net.minecraft.util.Util;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.function.Consumer;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-public record PickaxeTrim(@NotNull RegistryEntry<Item> ingredient, boolean showInTooltip) implements TooltipAppender {
+public record PickaxeTrim(@NotNull TrimType type) {
 
+    /*
     public static final @NotNull Codec<PickaxeTrim> CODEC = RecordCodecBuilder.create(
         instance -> instance
-            .group(
-                RegistryFixedCodec.of(RegistryKeys.ITEM).fieldOf("ingredient").forGetter(PickaxeTrim::ingredient),
-                Codec.BOOL.optionalFieldOf("show_in_tooltip", true).forGetter(PickaxeTrim::showInTooltip)
-            )
+            .group(RegistryFixedCodec.of(RegistryKeys.ITEM).fieldOf("ingredient").forGetter(PickaxeTrim::ingredient))
             .apply(instance, PickaxeTrim::new)
     );
+    */
 
+    /*
     public static final @NotNull PacketCodec<RegistryByteBuf, PickaxeTrim> PACKET_CODEC = PacketCodec.tuple(
         PacketCodecs.registryEntry(RegistryKeys.ITEM), PickaxeTrim::ingredient,
         PacketCodecs.BOOL, PickaxeTrim::showInTooltip,
         PickaxeTrim::new
     );
+    */
+
+    public static final String NBT_KEY = "pickaxetrims_trim_type";
 
     public enum PickaxeType {
         NETHERITE,
@@ -95,7 +90,11 @@ public record PickaxeTrim(@NotNull RegistryEntry<Item> ingredient, boolean showI
 
         public static final int COUNT = values().length;
 
-        private static @Nullable TrimType from(@NotNull Item item) {
+        public static final @NotNull Map<String, TrimType> BY_NAME = Util.make(new HashMap<>(), (map) -> {
+            for (var type : values()) map.put(type.toString(), type);
+        });
+
+        public static @Nullable TrimType from(@NotNull Item item) {
             if (item == Items.CRYING_OBSIDIAN) return CRYING_OBSIDIAN;
             if (item == Items.LAPIS_LAZULI) return LAPIS_LAZULI;
             if (item == Items.EMERALD) return EMERALD;
@@ -115,12 +114,23 @@ public record PickaxeTrim(@NotNull RegistryEntry<Item> ingredient, boolean showI
         }
     }
 
-    public @Nullable TrimType trimType() {
-        return TrimType.from(ingredient.value());
+    public @NotNull TrimType trimType() {
+        return type();
     }
 
     public static @Nullable PickaxeTrim get(@NotNull ItemStack stack) {
-        return stack.get(PickaxeTrimsImpl.getInstance().getTrimComponentType());
+        if (stack.hasNbt()) {
+            var trimType = TrimType.BY_NAME.get(stack.getNbt().getString(NBT_KEY));
+            if (trimType != null) return new PickaxeTrim(trimType);
+        }
+        return null;
+    }
+
+    public static void set(@NotNull ItemStack stack, @NotNull PickaxeTrim trim) {
+        set(stack, trim.trimType());
+    }
+    public static void set(@NotNull ItemStack stack, @NotNull TrimType trimType) {
+        stack.getOrCreateNbt().putString(NBT_KEY, trimType.toString());
     }
 
     public static @Nullable PickaxeType getPickaxeType(@Nullable ItemStack stack) {
@@ -142,17 +152,14 @@ public record PickaxeTrim(@NotNull RegistryEntry<Item> ingredient, boolean showI
     }
 
     private static final Text UPGRADE_TEXT =
-        Text.translatable(Util.createTranslationKey("item", Identifier.ofVanilla("smithing_template.upgrade"))).formatted(Formatting.GRAY);
+        Text.translatable(Util.createTranslationKey("item", new Identifier("smithing_template.upgrade"))).formatted(Formatting.GRAY);
 
-    @Override
-    public void appendTooltip(Item.TooltipContext context, Consumer<Text> tooltip, TooltipType type) {
-        if (showInTooltip) {
-            var trimType = trimType();
-            if (trimType != null) {
-                tooltip.accept(UPGRADE_TEXT);
-                tooltip.accept(ScreenTexts.space().append(trimType.getMaterialText()));
-                tooltip.accept(ScreenTexts.space().append(trimType.getDescriptionText()));
-            }
+    public static void appendTooltip(ItemStack stack, List<Text> tooltip) {
+        var trimType = getTrimType(stack);
+        if (trimType != null) {
+            tooltip.add(UPGRADE_TEXT);
+            tooltip.add(ScreenTexts.space().append(trimType.getMaterialText()));
+            tooltip.add(ScreenTexts.space().append(trimType.getDescriptionText()));
         }
     }
 

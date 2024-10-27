@@ -1,23 +1,25 @@
 package dev.foxgirl.pickaxetrims;
 
+import dev.architectury.platform.forge.EventBuses;
 import dev.foxgirl.pickaxetrims.shared.PickaxeTrimsImpl;
-import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemGroups;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.neoforged.bus.api.IEventBus;
-import net.neoforged.fml.common.Mod;
-import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
+import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
+import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 @Mod("pickaxetrims")
 public class PickaxeTrimsMod {
 
     private final PickaxeTrimsImpl impl = new PickaxeTrimsImpl();
 
-    public PickaxeTrimsMod(IEventBus modEventBus) {
+    public PickaxeTrimsMod() {
+        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         modEventBus.addListener(this::onCommonSetup);
         modEventBus.addListener(this::onBuildCreativeModeTabContents);
+
+        EventBuses.registerModEventBus("pickaxetrims", modEventBus);
 
         impl.initialize();
     }
@@ -27,11 +29,7 @@ public class PickaxeTrimsMod {
 
     private void onBuildCreativeModeTabContents(BuildCreativeModeTabContentsEvent event) {
         if (event.getTabKey() == ItemGroups.INGREDIENTS) {
-            event.insertAfter(
-                new ItemStack(Items.BOLT_ARMOR_TRIM_SMITHING_TEMPLATE),
-                new ItemStack(impl.getSmithingTemplateItem()),
-                ItemGroup.StackVisibility.PARENT_AND_SEARCH_TABS
-            );
+            event.add(impl.getSmithingTemplateItem());
         }
     }
 

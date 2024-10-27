@@ -8,14 +8,9 @@
         "item": "minecraft:netherite_pickaxe"
     },
     "addition": {
-        "item": "minecraft:emerald"
+        "item": "minecraft:quartz"
     },
     "result": {
-        "id": "minecraft:netherite_pickaxe",
-        "components": {
-            "pickaxetrims:trim": {
-                "ingredient": "minecraft:emerald"
-            }
-        }
+        "item": "minecraft:netherite_pickaxe"
     }
 }

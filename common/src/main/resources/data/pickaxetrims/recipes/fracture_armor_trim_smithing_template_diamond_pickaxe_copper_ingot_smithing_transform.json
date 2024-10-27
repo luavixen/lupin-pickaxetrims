@@ -8,14 +8,9 @@
         "item": "minecraft:diamond_pickaxe"
     },
     "addition": {
-        "item": "minecraft:lapis_lazuli"
+        "item": "minecraft:copper_ingot"
     },
     "result": {
-        "id": "minecraft:diamond_pickaxe",
-        "components": {
-            "pickaxetrims:trim": {
-                "ingredient": "minecraft:lapis_lazuli"
-            }
-        }
+        "item": "minecraft:diamond_pickaxe"
     }
 }
