@@ -4,7 +4,8 @@ plugins {
 
 loom {
     forge {
-        mixinConfig("pickaxetrims.mixins-shared.json", "pickaxetrims.mixins-client.json")
+        mixinConfig 'pickaxetrims.mixins-shared.json'
+        mixinConfig 'pickaxetrims.mixins-client.json'
     }
 }
 
