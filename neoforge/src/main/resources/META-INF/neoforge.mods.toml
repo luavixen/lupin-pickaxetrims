@@ -8,6 +8,7 @@ modId = "pickaxetrims"
 version = "${version}"
 
 displayName = "Better Pickaxe Trims"
+displayURL = "https://www.curseforge.com/minecraft/mc-mods/better-pickaxe-trims"
 
 authors = "lupiiin_, luavixen <lua@foxgirl.dev> (https://foxgirl.dev/)"
 description = "Put special trims on your pickaxe to give it extra abilities!"
@@ -30,7 +31,7 @@ side = "BOTH"
 [[dependencies.pickaxetrims]]
 modId = "minecraft"
 type = "required"
-versionRange = "[${mcversion},)"
+versionRange = "[${minecraft_version_min},${minecraft_version_max})"
 ordering = "NONE"
 side = "BOTH"
 
