@@ -25,12 +25,14 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.Rarity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 public final class PickaxeTrimsImpl implements TickEvent.Server, BlockEvent.Break, LootEvent.ModifyLootTable {
 
@@ -64,6 +66,10 @@ public final class PickaxeTrimsImpl implements TickEvent.Server, BlockEvent.Brea
         return RegistryKey.of(itemGroup.getRegistryKey(), itemGroup.getId());
     }
 
+    private <T extends Item> RegistrySupplier<T> registerItem(Identifier id, Function<Item.Settings, T> function, Item.Settings settings) {
+        return registryItem.register(id, () -> function.apply(settings.registryKey(RegistryKey.of(registryItem.getRegistrar().key(), id))));
+    }
+
     public PickaxeTrimsImpl() {
         INSTANCE = this;
 
@@ -85,9 +91,9 @@ public final class PickaxeTrimsImpl implements TickEvent.Server, BlockEvent.Brea
                 .cache()
                 .build()
         );
-        smithingTemplateItem = registryItem.register(
+        smithingTemplateItem = registerItem(
             Identifier.of("pickaxetrims", "fracture_armor_trim_smithing_template"),
-            () -> SmithingTemplateItem.of(Identifier.of("pickaxetrims", "fracture"))
+            SmithingTemplateItem::of, new Item.Settings().rarity(Rarity.RARE)
         );
         itemGroup = registryItemGroup.register(
             Identifier.of("pickaxetrims", "pickaxe_trims_tab"),
@@ -96,6 +102,8 @@ public final class PickaxeTrimsImpl implements TickEvent.Server, BlockEvent.Brea
                 () -> PickaxeTrim.set(new ItemStack(Items.NETHERITE_PICKAXE), PickaxeTrim.TrimType.EMERALD)
             )
         );
+
+        PickaxeTrimModels.forEach(id -> registerItem(id, Item::new, new Item.Settings().maxCount(0)));
     }
 
     private CryingObsidianMultiBreakEffect cryingObsidianEffect;

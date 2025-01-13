@@ -1,21 +1,15 @@
 {
     "type": "minecraft:smithing_transform",
-    "category": "equipment",
-    "template": {
-        "item": "pickaxetrims:fracture_armor_trim_smithing_template"
-    },
-    "base": {
-        "item": "minecraft:iron_pickaxe"
-    },
-    "addition": {
-        "item": "minecraft:emerald"
-    },
+    "template": "pickaxetrims:fracture_armor_trim_smithing_template",
+    "base": "minecraft:iron_pickaxe",
+    "addition": "minecraft:emerald",
     "result": {
         "id": "minecraft:iron_pickaxe",
         "components": {
             "pickaxetrims:trim": {
                 "ingredient": "minecraft:emerald"
-            }
+            },
+            "minecraft:item_model": "pickaxetrims:placeholder_iron_pickaxe_trimmed_emerald"
         }
     }
 }

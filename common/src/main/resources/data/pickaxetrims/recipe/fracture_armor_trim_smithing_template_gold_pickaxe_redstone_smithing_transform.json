@@ -1,0 +1,15 @@
+{
+    "type": "minecraft:smithing_transform",
+    "template": "pickaxetrims:fracture_armor_trim_smithing_template",
+    "base": "minecraft:golden_pickaxe",
+    "addition": "minecraft:redstone",
+    "result": {
+        "id": "minecraft:golden_pickaxe",
+        "components": {
+            "pickaxetrims:trim": {
+                "ingredient": "minecraft:redstone"
+            },
+            "minecraft:item_model": "pickaxetrims:placeholder_gold_pickaxe_trimmed_redstone"
+        }
+    }
+}

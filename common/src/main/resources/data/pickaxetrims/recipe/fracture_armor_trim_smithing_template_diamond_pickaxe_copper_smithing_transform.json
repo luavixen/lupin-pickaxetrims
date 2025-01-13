@@ -1,0 +1,15 @@
+{
+    "type": "minecraft:smithing_transform",
+    "template": "pickaxetrims:fracture_armor_trim_smithing_template",
+    "base": "minecraft:diamond_pickaxe",
+    "addition": "minecraft:copper_ingot",
+    "result": {
+        "id": "minecraft:diamond_pickaxe",
+        "components": {
+            "pickaxetrims:trim": {
+                "ingredient": "minecraft:copper_ingot"
+            },
+            "minecraft:item_model": "pickaxetrims:placeholder_diamond_pickaxe_trimmed_copper"
+        }
+    }
+}

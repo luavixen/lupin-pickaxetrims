@@ -24,7 +24,7 @@ config = "pickaxetrims.mixins-client.json"
 [[dependencies.pickaxetrims]]
 modId = "neoforge"
 type = "required"
-versionRange = "[21.0,)"
+versionRange = "[21.4,)"
 ordering = "NONE"
 side = "BOTH"
 

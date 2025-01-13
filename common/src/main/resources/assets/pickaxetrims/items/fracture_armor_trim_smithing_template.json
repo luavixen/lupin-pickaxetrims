@@ -1,0 +1,6 @@
+{
+    "model": {
+        "type": "minecraft:model",
+        "model": "pickaxetrims:item/fracture_armor_trim_smithing_template"
+    }
+}

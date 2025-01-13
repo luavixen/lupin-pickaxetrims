@@ -1,21 +1,15 @@
 {
     "type": "minecraft:crafting_shaped",
-    "category": "equipment",
+    "category": "misc",
     "pattern": [
         " CI",
         "CEC",
         "IC "
     ],
     "key": {
-        "C": {
-            "item": "minecraft:copper_ingot"
-        },
-        "I": {
-            "item": "minecraft:iron_ingot"
-        },
-        "E": {
-            "item": "minecraft:emerald"
-        }
+        "C": "minecraft:copper_ingot",
+        "I": "minecraft:iron_ingot",
+        "E": "minecraft:emerald"
     },
     "result": {
         "id": "pickaxetrims:fracture_armor_trim_smithing_template",

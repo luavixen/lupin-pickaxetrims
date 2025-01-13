@@ -3,8 +3,8 @@
         {
             "type": "minecraft:paletted_permutations",
             "textures": [
-                "pickaxetrims:trims/models/armor/fracture",
-                "pickaxetrims:trims/models/armor/fracture_leggings"
+                "pickaxetrims:trims/entity/humanoid/fracture",
+                "pickaxetrims:trims/entity/humanoid_leggings/fracture"
             ],
             "palette_key": "trims/color_palettes/trim_palette",
             "permutations": {
@@ -21,7 +21,8 @@
                 "iron_darker": "trims/color_palettes/iron_darker",
                 "gold_darker": "trims/color_palettes/gold_darker",
                 "diamond_darker": "trims/color_palettes/diamond_darker",
-                "netherite_darker": "trims/color_palettes/netherite_darker"
+                "netherite_darker": "trims/color_palettes/netherite_darker",
+                "resin": "trims/color_palettes/resin"
             }
         }
     ]

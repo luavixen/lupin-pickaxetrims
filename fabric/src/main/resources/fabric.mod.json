@@ -10,7 +10,7 @@
         "minecraft": "${minecraft_version_semver}",
         "fabricloader": ">=0.15.0",
         "fabric": "*",
-        "architectury": ">=13.0.2"
+        "architectury": ">=15.0.1"
     },
 
     "name": "Better Pickaxe Trims",

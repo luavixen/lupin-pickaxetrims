@@ -1,0 +1,6 @@
+{
+    "model": {
+        "type": "minecraft:model",
+        "model": "pickaxetrims:item/gold_pickaxe_trimmed_redstone"
+    }
+}

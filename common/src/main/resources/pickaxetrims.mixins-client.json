@@ -7,8 +7,6 @@
         "defaultRequire": 1
     },
     "client": [
-        "MixinItemRenderer",
-        "MixinItemStack",
-        "MixinModelLoader"
+        "MixinItemStack"
     ]
 }

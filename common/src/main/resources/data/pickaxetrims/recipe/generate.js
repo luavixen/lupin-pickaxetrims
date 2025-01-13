@@ -2,23 +2,39 @@
 
 const fs = require('fs');
 
+const pickaxes = [
+    { id: 'minecraft:netherite_pickaxe', name: 'netherite_pickaxe' },
+    { id: 'minecraft:diamond_pickaxe', name: 'diamond_pickaxe' },
+    { id: 'minecraft:golden_pickaxe', name: 'gold_pickaxe' },
+    { id: 'minecraft:iron_pickaxe', name: 'iron_pickaxe' },
+];
+
+const trims = [
+    { id: 'minecraft:crying_obsidian', name: 'crying_obsidian' },
+    { id: 'minecraft:lapis_lazuli', name: 'lapis_lazuli' },
+    { id: 'minecraft:emerald', name: 'emerald' },
+    { id: 'minecraft:quartz', name: 'quartz' },
+    { id: 'minecraft:redstone', name: 'redstone' },
+    { id: 'minecraft:copper_ingot', name: 'copper' },
+];
+
+for (const pickaxe of pickaxes) {
+    for (const trim of trims) {
+        writePickaxeTrimRecipe(pickaxe, trim);
+    }
+}
+
 function createPickaxeTrimRecipe(pickaxe, trim) {
     const recipe = {
         type: 'minecraft:smithing_transform',
-        category: 'equipment',
-        template: {
-            item: 'pickaxetrims:fracture_armor_trim_smithing_template'
-        },
-        base: {
-            item: pickaxe.id
-        },
-        addition: {
-            item: trim.id
-        },
+        template: 'pickaxetrims:fracture_armor_trim_smithing_template',
+        base: pickaxe.id,
+        addition: trim.id,
         result: {
             id: pickaxe.id,
             components: {
-                'pickaxetrims:trim': { ingredient: trim.id }
+                'pickaxetrims:trim': { ingredient: trim.id },
+                'minecraft:item_model': `pickaxetrims:placeholder_${pickaxe.name}_trimmed_${trim.name}`
             }
         }
     };
@@ -26,9 +42,7 @@ function createPickaxeTrimRecipe(pickaxe, trim) {
 }
 
 function getRecipeName(pickaxe, trim) {
-    const pickaxeName = pickaxe.id.replace('minecraft:', '');
-    const trimName = trim.id.replace('minecraft:', '');
-    return `fracture_armor_trim_smithing_template_${pickaxeName}_${trimName}_smithing_transform.json`;
+    return `fracture_armor_trim_smithing_template_${pickaxe.name}_${trim.name}_smithing_transform.json`;
 }
 
 function writePickaxeTrimRecipe(pickaxe, trim) {
@@ -36,26 +50,4 @@ function writePickaxeTrimRecipe(pickaxe, trim) {
     const recipeName = getRecipeName(pickaxe, trim);
     const recipeString = JSON.stringify(recipe, null, 4) + '\n';
     fs.writeFileSync(recipeName, recipeString, 'utf-8');
-}
-
-const pickaxes = [
-    { id: 'minecraft:netherite_pickaxe' },
-    { id: 'minecraft:diamond_pickaxe' },
-    { id: 'minecraft:golden_pickaxe' },
-    { id: 'minecraft:iron_pickaxe' },
-];
-
-const trims = [
-    { id: 'minecraft:crying_obsidian' },
-    { id: 'minecraft:lapis_lazuli' },
-    { id: 'minecraft:emerald' },
-    { id: 'minecraft:quartz' },
-    { id: 'minecraft:redstone' },
-    { id: 'minecraft:copper_ingot' },
-];
-
-for (const pickaxe of pickaxes) {
-    for (const trim of trims) {
-        writePickaxeTrimRecipe(pickaxe, trim);
-    }
 }

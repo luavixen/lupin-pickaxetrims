@@ -3,6 +3,7 @@ package dev.foxgirl.pickaxetrims.shared;
 import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.component.DataComponentTypes;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -40,7 +41,7 @@ public record PickaxeTrim(@NotNull RegistryEntry<Item> ingredient, boolean showI
 
     public static final @NotNull PacketCodec<RegistryByteBuf, PickaxeTrim> PACKET_CODEC = PacketCodec.tuple(
         PacketCodecs.registryEntry(RegistryKeys.ITEM), PickaxeTrim::ingredient,
-        PacketCodecs.BOOL, PickaxeTrim::showInTooltip,
+        PacketCodecs.BOOLEAN, PickaxeTrim::showInTooltip,
         PickaxeTrim::new
     );
 
@@ -155,6 +156,11 @@ public record PickaxeTrim(@NotNull RegistryEntry<Item> ingredient, boolean showI
 
     public static @NotNull ItemStack set(@NotNull ItemStack stack, @NotNull PickaxeTrim trim) {
         stack.set(PickaxeTrimsImpl.getInstance().getTrimComponentType(), trim);
+        var pickaxeType = getPickaxeType(stack);
+        var trimType = trim.trimType();
+        if (pickaxeType != null && trimType != null) {
+            stack.set(DataComponentTypes.ITEM_MODEL, PickaxeTrimModels.get(pickaxeType, trimType));
+        }
         return stack;
     }
     public static @NotNull ItemStack set(@NotNull ItemStack stack, @NotNull TrimType trimType) {
